@@ -432,6 +432,16 @@
 
 <div class="progress" id="progress"></div>
 
+<div id="lockScreen" style="position:fixed; inset:0; z-index:999; background:var(--bg); display:flex; align-items:center; justify-content:center; padding:24px;">
+  <form id="lockForm" style="max-width:320px; width:100%; text-align:center;">
+    <p class="eyebrow" style="margin-bottom:6px;">給沁沁</p>
+    <h2 style="margin-bottom:18px;">請輸入密碼</h2>
+    <input id="lockInput" type="text" inputmode="numeric" autocomplete="off" placeholder="密碼" style="width:100%; padding:14px; border-radius:12px; border:1px solid var(--line); background:var(--card); color:var(--ink); font-size:1.1rem; text-align:center; margin-bottom:14px; font-family:var(--font-body);">
+    <button type="submit" class="btn" style="width:100%;">進入</button>
+    <p id="lockError" style="color:var(--rose); font-size:.85rem; margin-top:12px; display:none;">密碼不對，再試一次。</p>
+  </form>
+</div>
+
 <section class="hero">
   <div class="wrap">
     <div class="tag">給沁沁</div>
@@ -674,6 +684,47 @@
 
 <script>
 (function(){
+  // password lock — hashed so the code isn't sitting in plaintext in the page source
+  const LOCK_HASH = '6c25c8f454fea8dd5cd0b201b4f739993aebfc454de7b410ee9457c553699a85';
+  const LOCK_KEY = 'qinqin-unlocked';
+  const lockScreen = document.getElementById('lockScreen');
+  const lockForm = document.getElementById('lockForm');
+  const lockInput = document.getElementById('lockInput');
+  const lockError = document.getElementById('lockError');
+
+  async function sha256Hex(text){
+    if(!(window.crypto && crypto.subtle)) return null;
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function unlock(){
+    lockScreen.style.display = 'none';
+    document.body.style.overflow = '';
+    try{ sessionStorage.setItem(LOCK_KEY, '1'); }catch(e){}
+  }
+
+  let alreadyUnlocked = false;
+  try{ alreadyUnlocked = sessionStorage.getItem(LOCK_KEY) === '1'; }catch(e){}
+  if(alreadyUnlocked){
+    unlock();
+  } else {
+    document.body.style.overflow = 'hidden';
+    lockInput.focus();
+  }
+
+  lockForm.addEventListener('submit', async function(ev){
+    ev.preventDefault();
+    const hash = await sha256Hex(lockInput.value.trim());
+    if(hash === LOCK_HASH){
+      unlock();
+    } else {
+      lockError.style.display = 'block';
+      lockInput.value = '';
+      lockInput.focus();
+    }
+  });
+
   // progress bar
   const bar = document.getElementById('progress');
   function onScroll(){
