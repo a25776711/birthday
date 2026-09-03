@@ -662,6 +662,11 @@
       <div class="finale-reveal" id="yesReveal">
         <p>我想繼續跟你一起生活下去，不是因為習慣了，是因為我是真的喜歡你，也想陪你走接下來的每一年。</p>
         <div style="text-align:center;" class="heart">♥</div>
+        <p style="margin-top:24px;">我想知道我還有什麼可以改的，可以跟我說說嗎？</p>
+        <div id="yesInput" contenteditable="true" artifact-local data-placeholder="想讓我知道的都可以說……" style="width:100%; min-height:120px; padding:14px; border-radius:12px; border:1px solid var(--line); font-family:var(--font-body); font-size:1rem; color:var(--ink); background:var(--bg-alt); outline:none;"></div>
+        <div class="finale-btn-wrap">
+          <button class="btn" id="sendYes">送出</button>
+        </div>
       </div>
 
       <div class="finale-reveal" id="noReveal">
@@ -713,12 +718,17 @@
     lockInput.focus();
   }
 
+  let wrongAttempts = 0;
   lockForm.addEventListener('submit', async function(ev){
     ev.preventDefault();
     const hash = await sha256Hex(lockInput.value.trim());
     if(hash === LOCK_HASH){
       unlock();
     } else {
+      lockError.textContent = wrongAttempts === 0
+        ? '密碼不對——提示：我們開始的那一天。'
+        : '密碼不對，再試一次。';
+      wrongAttempts++;
       lockError.style.display = 'block';
       lockInput.value = '';
       lockInput.focus();
@@ -870,14 +880,25 @@
   document.getElementById('btnYes').addEventListener('click', function(){
     finaleChoice.style.display = 'none';
     yesReveal.classList.add('show');
-    answerRecord.textContent = '他選了「好」。';
-    answerRecord.style.display = 'block';
-    sendAnswer('沁沁回覆了：好', '讀完這封信後，沁沁選擇了「好」。');
   });
 
   document.getElementById('btnNo').addEventListener('click', function(){
     finaleChoice.style.display = 'none';
     noReveal.classList.add('show');
+  });
+
+  document.getElementById('sendYes').addEventListener('click', function(){
+    const text = document.getElementById('yesInput').textContent.trim();
+    const body = text
+      ? '讀完這封信後，沁沁選擇了「好」。\n\n沁沁覺得還可以改進的地方：\n' + text
+      : '讀完這封信後，沁沁選擇了「好」。';
+    answerRecord.textContent = text ? '他選了「好」，想跟你說：' + text : '他選了「好」。';
+    answerRecord.style.display = 'block';
+    this.disabled = true;
+    this.textContent = '正在送出……';
+    sendAnswer('沁沁回覆了：好', body).then(()=>{
+      this.textContent = '已經留言給他了';
+    });
   });
 
   document.getElementById('sendNo').addEventListener('click', function(){
