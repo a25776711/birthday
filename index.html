@@ -436,10 +436,11 @@
 <div id="lockScreen" style="position:fixed; inset:0; z-index:999; background:var(--bg); display:flex; align-items:center; justify-content:center; padding:24px;">
   <form id="lockForm" style="max-width:320px; width:100%; text-align:center;">
     <p class="eyebrow" style="margin-bottom:6px;">給沁沁</p>
-    <h2 style="margin-bottom:18px;">請輸入密碼</h2>
+    <h2 id="lockTitle" style="margin-bottom:18px;">請輸入密碼</h2>
     <input id="lockInput" type="text" inputmode="numeric" autocomplete="off" placeholder="密碼" style="width:100%; padding:14px; border-radius:12px; border:1px solid var(--line); background:var(--card); color:var(--ink); font-size:1.1rem; text-align:center; margin-bottom:14px; font-family:var(--font-body);">
     <button type="submit" class="btn" style="width:100%;">進入</button>
     <p id="lockError" style="color:var(--rose); font-size:.85rem; margin-top:12px; display:none;">密碼不對，再試一次。</p>
+    <p id="lockGate" style="color:var(--ink-soft); font-size:.95rem; margin-top:12px; display:none; font-variant-numeric:tabular-nums;">這封信還沒到打開的時間。</p>
   </form>
 </div>
 
@@ -705,8 +706,14 @@
   const lockForm = document.getElementById('lockForm');
   const lockInput = document.getElementById('lockInput');
   const lockError = document.getElementById('lockError');
+  const lockGate = document.getElementById('lockGate');
   const introMsg = document.getElementById('introMsg');
   const introBtn = document.getElementById('introBtn');
+
+  // Nothing opens before this moment, even with the right password.
+  const UNLOCK_AT = new Date('2026-09-30T00:00:00+08:00').getTime();
+  // Set to true to test locally without waiting for the date (or changing your clock).
+  const DEV_SKIP_GATE = false;
 
   async function sha256Hex(text){
     if(!(window.crypto && crypto.subtle)) return null;
@@ -731,6 +738,38 @@
     try{ sessionStorage.setItem(LOCK_KEY, '1'); }catch(e){}
   });
 
+  const lockTitle = document.getElementById('lockTitle');
+  function formatCountdown(ms){
+    const total = Math.max(0, Math.floor(ms / 1000));
+    const d = Math.floor(total / 86400);
+    const h = Math.floor((total % 86400) / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    const pad = n => String(n).padStart(2, '0');
+    return d + ' 天 ' + pad(h) + ' 時 ' + pad(m) + ' 分 ' + pad(s) + ' 秒';
+  }
+
+  function applyTimeGate(){
+    const remaining = UNLOCK_AT - Date.now();
+    const gated = !DEV_SKIP_GATE && remaining > 0;
+    lockInput.style.display = gated ? 'none' : '';
+    lockForm.querySelector('button[type="submit"]').style.display = gated ? 'none' : '';
+    lockGate.style.display = gated ? 'block' : 'none';
+    lockTitle.textContent = gated ? '還沒到時間' : '請輸入密碼';
+    if(gated) lockGate.textContent = '還要等 ' + formatCountdown(remaining);
+    return gated;
+  }
+
+  let gateTimer = null;
+  if(applyTimeGate()){
+    gateTimer = setInterval(function(){
+      if(!applyTimeGate()){
+        clearInterval(gateTimer);
+        lockInput.focus();
+      }
+    }, 1000);
+  }
+
   let alreadyUnlocked = false;
   try{ alreadyUnlocked = sessionStorage.getItem(LOCK_KEY) === '1'; }catch(e){}
   if(alreadyUnlocked){
@@ -743,6 +782,7 @@
   let wrongAttempts = 0;
   lockForm.addEventListener('submit', async function(ev){
     ev.preventDefault();
+    if(!DEV_SKIP_GATE && Date.now() < UNLOCK_AT){ applyTimeGate(); return; }
     const hash = await sha256Hex(lockInput.value.trim());
     if(hash === LOCK_HASH){
       showIntro();
