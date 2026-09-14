@@ -454,8 +454,8 @@
 <section class="hero">
   <div class="wrap">
     <div class="tag">給沁沁</div>
-    <h1>我們的這四年，<br>一步一步走給你看</h1>
-    <p class="lede">不是回憶錄，是一段還沒寫完的故事，陪我重新走一次</p>
+    <h1>我們的這四年，<br>我們一起再看一次</h1>
+    <p class="lede">不是回憶錄，是一段還沒寫完的故事</p>
     <div class="years">
       <span>高雄・相遇</span><span>台北・同居</span><span>大三升大四</span><span>還在繼續</span>
     </div>
@@ -636,7 +636,7 @@
       <h2>關於我們吵架這件事</h2>
     </div>
     <div class="honest">
-      <span class="lede">我知道問題大部分出在我身上，我想老實說出來，不是找藉口。</span>
+      <span class="lede">我知道問題大部分出在我身上。</span>
       <ul>
         <li>我太容易情緒化，一激動就讓氣氛僵掉，還用不對的方式處理。</li>
         <li>你選擇不說話冷靜，我卻習慣拖很久才願意去解決，我們一直沒對上頻率。</li>
@@ -646,7 +646,10 @@
         <li>我不太社會化，很多要求其實不太合理，是我一直沒發現。</li>
         <li>之前因為等你下班等太久就情緒化生氣——現在想起來，真的很不應該。</li>
       </ul>
-      <p>這一年我們的對話越來越少，我到最近才知道，你之前就想過要分開，只是一直沒說。我很晚才知道，但我沒有想逃避。這些問題我都在改，可能你會覺得我為什麼之前不改，因為我需要很多時間去處理我自己的心情，但是我在努力變得更好，變回值得讓你喜歡的Kaven</p>
+        <p>這一年我們的對話越來越少，我到最近才知道，你之前就想過要分開，只是一直沒說，我很晚才知道。<br>
+          你開始在丸舢工作後，有了比較多錢跟時間可以去開發興趣做更多事情，但是也遇到更多我不熟悉的人，因為這是我第一次談戀愛有很多不足，我很怕你不要我了<br>
+          這些問題我都在改，可能你會覺得我為什麼之前不改，因為我需要很多時間去處理我自己的心情以免做出錯誤的決定，但是我在努力變得更好，變回值得讓你喜歡的Kaven
+        </p>
     </div>
   </div>
 </section>
@@ -661,7 +664,7 @@
     <div class="letter">
       <span class="hand">沁沁，</span>
       <p>從高鐵站的捉迷藏，到現在同居的每一天，這四年我從來沒有一天不喜歡你。你為我做過的每一件事我都很感動——雷姆大禮盒、告白那一夜、畢業那天的陪伴，還有無數個你陪著我的日子</p>
-      <p>雖然我知道我們的戀愛觀會有些不同，但是我一直都記得當初我們周圍的情侶交往時你對我說過影響很深的的話:「哪對情侶交往不是奔著結婚的」，這句話我那時想了很久，我不知道當時你是怎麼想的，但至少我現在內心是認同這句話的</p>
+      <p>雖然我知道我們的戀愛觀會有些不同，但是我一直都記得當初我們周圍的情侶交往時你對我說過影響很深的的話:「哪對情侶交往不是奔著結婚的」，這句話我那時想了很久，我不知道當時你想法發生了什麼變化，但至少我現在內心是認同這句話的</p>
       <p>我知道這一年我讓你很累，也知道你已經想了很久，但我真的在改，學著好好聽你說話，學著把心裡話說出口，學著好好表達，學著不要把你的付出當作理所當然</p>
       <p style="text-align:center; font-weight:700;">再給我一次機會，好嗎？</p>
       <div class="finale-btn-wrap" id="finaleChoice">
@@ -680,7 +683,7 @@
       </div>
 
       <div class="finale-reveal" id="noReveal">
-        <p>沒關係，謝謝你願意看到這裡。如果有什麼想對我說的話，寫下來吧</p>
+        <p>沒關係，謝謝你願意看到這裡，可能我不是你心中的唯一了，但我想你知道，我對你的感情是真誠的，還有什麼話可以跟我說說</p>
         <div id="noInput" contenteditable="true" artifact-local data-placeholder="想跟他說的話……" style="width:100%; min-height:120px; padding:14px; border-radius:12px; border:1px solid var(--line); font-family:var(--font-body); font-size:1rem; color:var(--ink); background:var(--bg-alt); outline:none;"></div>
         <div class="finale-btn-wrap">
           <button class="btn" id="sendNo">送出</button>
@@ -755,7 +758,7 @@
     lockInput.style.display = gated ? 'none' : '';
     lockForm.querySelector('button[type="submit"]').style.display = gated ? 'none' : '';
     lockGate.style.display = gated ? 'block' : 'none';
-    lockTitle.textContent = gated ? '還沒到時間' : '請輸入密碼';
+    lockTitle.textContent = gated ? '還沒到時間，等你生日結束再來看看' : '請輸入密碼';
     if(gated) lockGate.textContent = '還要等 ' + formatCountdown(remaining);
     return gated;
   }
