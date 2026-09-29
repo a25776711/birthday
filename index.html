@@ -438,6 +438,17 @@
   </form>
 </div>
 
+<div id="privacyCheck" style="display:none; position:fixed; inset:0; z-index:998; background:var(--bg); align-items:center; justify-content:center; padding:24px;">
+  <div style="max-width:340px; width:100%; text-align:center;">
+    <p class="hand" style="font-size:1.3rem;">你現在是自己一個人在看這個嗎？</p>
+    <div id="privacyChoice" style="display:flex; gap:12px; justify-content:center; margin-top:22px;">
+      <button class="btn" id="privacyYes">是</button>
+      <button class="btn" id="privacyNo" style="background:var(--card); color:var(--ink); border:1px solid var(--line); box-shadow:none;">不是</button>
+    </div>
+    <p id="privacyNoMsg" style="display:none; margin-top:20px; color:var(--ink-soft); font-size:.95rem;">沒關係，拜託等到只有自己一個人的時候，再打開這個看喔。</p>
+  </div>
+</div>
+
 <div id="introMsg" style="display:none; position:fixed; inset:0; z-index:998; background:var(--bg); align-items:center; justify-content:center; padding:24px;">
   <div style="max-width:340px; width:100%; text-align:center;">
     <p class="hand" style="font-size:1.35rem;">其實，這個前面的部分我在七月紀念日那天就想做給你了</p>
@@ -752,10 +763,28 @@
     try{ sessionStorage.setItem(LOCK_KEY, '1'); }catch(e){}
   }
 
-  function showIntro(){
+  const privacyCheck = document.getElementById('privacyCheck');
+  const privacyChoice = document.getElementById('privacyChoice');
+  const privacyNoMsg = document.getElementById('privacyNoMsg');
+
+  function showPrivacyCheck(){
     lockScreen.style.display = 'none';
+    privacyCheck.style.display = 'flex';
+  }
+
+  function showIntro(){
+    privacyCheck.style.display = 'none';
     introMsg.style.display = 'flex';
   }
+
+  document.getElementById('privacyYes').addEventListener('click', function(){
+    showIntro();
+  });
+
+  document.getElementById('privacyNo').addEventListener('click', function(){
+    privacyChoice.style.display = 'none';
+    privacyNoMsg.style.display = 'block';
+  });
 
   introBtn.addEventListener('click', function(){
     introMsg.style.display = 'none';
@@ -810,7 +839,7 @@
     if(!DEV_SKIP_GATE && Date.now() < UNLOCK_AT){ applyTimeGate(); return; }
     const hash = await sha256Hex(lockInput.value.trim());
     if(hash === LOCK_HASH){
-      showIntro();
+      showPrivacyCheck();
     } else {
       lockError.textContent = wrongAttempts === 0
         ? '密碼不對——提示：我們開始的那一天。'
