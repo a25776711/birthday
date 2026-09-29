@@ -738,7 +738,7 @@
   // Nothing opens before this moment, even with the right password.
   const UNLOCK_AT = new Date('2026-09-30T00:00:00+08:00').getTime();
   // Set to true to test locally without waiting for the date (or changing your clock).
-  const DEV_SKIP_GATE = true;
+  const DEV_SKIP_GATE = false;
 
   async function sha256Hex(text){
     if(!(window.crypto && crypto.subtle)) return null;
