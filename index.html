@@ -648,7 +648,27 @@
     </div>
   </div>
 </section>
-
+<section class="reveal-io tight">
+  <div class="wrap">
+    <div class="chapter-head">
+      <p class="eyebrow">第九章 </p>
+      <h2>我對性格不合這件事的看法</h2>
+    </div>
+    <div class="honest">
+      <span class="lede">我只想說，我並沒有覺得這個不重要</span>
+      <ul>
+        <li>我們生活習慣很多地方完全不同，但是過了這麼久，我們還是過到了今天</li>
+        <li>我們解決事情的方式不同，但是我們都為了這個關係努力過</li>
+        <li>你最近一直在委婉的表達你的想法，但是我一直想扭轉他</li>
+        <li>你說我們都需要被照顧，我也希望我能給你更多的關心和愛，我真的沒有這麼認真付出過</li>
+        <li>我們生活上也有很多互補的習慣</li>
+      </ul>
+      <p>你知道我不喜歡那群人，我感覺他們永遠只看的到我差勁的那面<br>覺得我只是個不成熟的屁孩<br>覺得我不值得你喜歡<br>覺得我愛人的方式像智障<br>覺得怎麼會有人這麼弱智這都看不出來<br>為你感到不值覺得我應該直接放棄這段感情去路邊死一死<br>還有人會覺得他知道我在想什麼，只是他的處理方式更好<br>
+        不用說不是這樣，因為我之前當過至少7對情侶其中一方的親友團，我一直都不喜歡別人交往時成為別人的親友團，這樣我永遠只會看到他的抱怨，我真的很不想這樣去認識一個人
+      </p>
+    </div>
+  </div>
+</section>
 <!-- Chapter 10: finale -->
 <section class="reveal-io finale">
   <div class="wrap">
@@ -679,7 +699,13 @@
       </div>
 
       <div class="finale-reveal" id="noReveal">
-        <p>沒關係，謝謝你願意看到這裡，但你是我心中的唯一，我可能不會再有下一個唯一了<br>我想你知道，我對你的感情是真誠的，還有什麼話可以跟我說說</p>
+        <p>沒關係，我知道你一直用要搬家當作分手的時間點<br>
+          我不想這麼說，但是依照我目前的愛情觀來說，你是我心中的唯一，我可能不會再有下一個唯一了<br>
+          你可能會覺得不可能，但是我的愛情觀是：<br>
+          一輩子只認真喜歡一次<br>一輩子只交往過一次<br>一輩子只愛過一次<br>這可能也是我很少說愛你的原因吧<br>
+          我真的不知道該怎麼辦了<br>
+          我對你的感情是真誠的，還有什麼話可以跟我說說
+        </p>
         <div id="noInput" contenteditable="true" artifact-local data-placeholder="想跟他說的話……" style="width:100%; min-height:120px; padding:14px; border-radius:12px; border:1px solid var(--line); font-family:var(--font-body); font-size:1rem; color:var(--ink); background:var(--bg-alt); outline:none;"></div>
         <div class="finale-btn-wrap">
           <button class="btn" id="sendNo">送出</button>
@@ -694,7 +720,7 @@
   </div>
 </section>
 
-<footer>致沁沁，2026.08.23</footer>
+<footer>致沁沁，2026.09.29</footer>
 
 <script>
 (function(){
@@ -712,7 +738,7 @@
   // Nothing opens before this moment, even with the right password.
   const UNLOCK_AT = new Date('2026-09-30T00:00:00+08:00').getTime();
   // Set to true to test locally without waiting for the date (or changing your clock).
-  const DEV_SKIP_GATE = false;
+  const DEV_SKIP_GATE = true;
 
   async function sha256Hex(text){
     if(!(window.crypto && crypto.subtle)) return null;
